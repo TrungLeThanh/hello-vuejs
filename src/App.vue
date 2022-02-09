@@ -1,28 +1,59 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="id">
+    <h1>Hello Vue</h1>
+    <div>
+      <input type="text" v-model="task_new" @keyup.enter="onEnter" />
+      <button @click="addTask()">Add</button>
+      <div class="wrap-task" v-for="item in tasks" :key="item.id">
+        <input type="checkbox" v-model="item.status" />
+        <p :class="{ done: item.status }">{{ item.name }}</p>
+        <button @click="deleteTask(item.id)">Delete</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      task_new: "",
+      tasks: [],
+    };
+  },
+  components: {},
+
+  methods: {
+    addTask: function () {
+      this.tasks.push({ name: this.task_new, state: false });
+    },
+
+    onEnter: function () {
+      this.tasks.push({ id: Math.random(), name: this.task_new, state: false });
+    },
+
+    deleteTask: function (id) {
+      this.tasks = this.tasks.filter((item) => item.id !== id);
+    },
+  },
+
+  watch: {
+    tasks: function () {
+      this.task_new = "";
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.wrap-task {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.done {
+  text-decoration: line-through;
 }
 </style>
